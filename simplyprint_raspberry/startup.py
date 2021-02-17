@@ -208,6 +208,10 @@ def run_startup():
             if python_version:
                 python_version = python_version.encode("utf-8")
 
+        # Add port to IP, if we have one
+        if the_ip and config.get("info", "op_proxy_port") != "":
+            the_ip += ":" + config.get("info", "op_proxy_port")
+
         the_url = ("&startup=true"
                    "&device_ip=" + (url_quote(the_ip.rstrip("\n\r").lstrip())) +
                    "&pi_model=" + (url_quote(pi_model.rstrip("\n\r").lstrip())) +

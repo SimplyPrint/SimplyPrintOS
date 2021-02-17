@@ -102,7 +102,7 @@ def current_job_completion():
 
 octoprint_plugin_name = "SimplyPrint"
 request_url = "https://simplyprint.io/"
-update_url = request_url + "api/do_update.php"
+update_url = "https://request.simplyprint.io/"
 
 # ~ Debugging & logging
 log_locations = os.path.join(dir_path, "logs")
@@ -191,7 +191,10 @@ required_sections = {
         "octoprint_down": "False",
         "last_user_settings_sync": "0000-00-00 00:00:00",
         "gcode_scripts_backed_up": "False",
-        "safemode_check_next": "0"
+        "safemode_check_next": "0",
+        "op_proxy_port": "",
+        "local_ip": "",
+        "ssl": "False",
     },
     "settings": {
         "display_enabled": "True",
@@ -335,6 +338,18 @@ def set_config():
             }
         }
         octoprint_api_req("settings", post_data)
+
+
+def local_url():
+    scheme = "http://"
+    if config.getboolean("info", "ssl"):
+        scheme = "https://"
+
+    config_ip = config.get("info", "local_ip")
+    if config_ip:
+        return scheme + config_ip
+
+    return scheme + "localhost"
 
 
 def sub_start_script(script):
